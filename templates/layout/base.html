@@ -1,0 +1,49 @@
+{% load static %}
+<!doctype html>
+<html lang="tr">
+<head>
+
+    <meta charset="utf-8">
+    <title>LolMe - {% block pageTitle %}{% endblock %}</title>
+
+    {% block customCss %}
+    {% endblock %}
+
+</head>
+
+<body class="body">
+
+<div class="wrapper">
+    <ul class="navbar">
+        <li><a href="{% url 'homePage' %}">Home</a></li>
+        <li style="float:right"><a class="active" href="{% url 'aboutPage' %}">About & Contact</a></li>
+    </ul>
+    <div id="adminmsg" class="adminmsg">
+        <span id="adminmsgx" class="adminmsgx">×</span>
+        <span id="adminmsgtext" class="adminmsgtext">Derpity</span>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+<div class="my-footer">
+    <div class="disclaimer">
+        Lolme isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone
+        officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks
+        or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
+    </div>
+</div>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+
+
+{% block customJs %}
+{% endblock %}
+
+
+</body>
+
+
+</html>
