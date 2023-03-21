@@ -4,13 +4,77 @@
 {% block pageTitle %}About{% endblock %}
 {% block content %}
 
-    {{ summoner_name }}-{{ region }}
+    {% if error %}
+
+        Summoner Not Found
+
+    {% else %}
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-horizontal">
+                            <div class="img-square-wrapper">
+                                <img width="100px" class="" src="{{ summoner.profileIconUrl }}">
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">{{ summoner.name }}</h4>
+                                <p class="card-text">Seviye : <b>{{ summoner.level }}</b></p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Icon</th>
+                <th>championLevel</th>
+                <th>championPoints</th>
+                <th>lastPlayTime</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for champion in top20champions %}
+
+                <tr>
+                    <td><img src="{{ champion.championIcon }}"></td>
+                    <td>{{ champion.championLevel }}</td>
+                    <td>{{ champion.championPoints }}</td>
+                    <td>{{ champion.lastPlayTime }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    {% endif %}
+
+
 
 {% endblock %}
 
 
 {% block customCss %}
     <link href="{% static 'css/about.css' %}" rel="stylesheet" type="text/css" media="screen">
+
+    <style>
+
+        .card-horizontal {
+            display: flex;
+            flex: 1 1 auto;
+        }
+
+    </style>
+
 {% endblock %}
 {% block customJs %}
     <script type="text/javascript" src="{% static 'js/about.js' %}"></script>
