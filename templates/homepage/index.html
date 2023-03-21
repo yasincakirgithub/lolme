@@ -10,31 +10,33 @@
             <span id="quote" class="slogan"></span><span id="author" class="slogan"
                                                          style="font-style: normal; font-weight: 300; white-space: nowrap;">.</span>
         </div>
-        <br>
 
-        <input name="textfield" type="text" class="textInput" placeholder="Summoner In Game" autofocus>
+        <form id="summonerForm">
+            <br>
 
-        <br>
-        <br>
+            <input required id="summonerName" type="text" class="textInput" placeholder="Summoner In Game">
 
-        <ul class="region" id="region-select">
-            <li><a class="region-button" id="NA" style="background-color: #111;">NA</a></li>
-            <li><a class="region-button" id="EUW">EUW</a></li>
-            <li><a class="region-button" id="EUNE">EUNE</a></li>
-            <li><a class="region-button" id="BR">BR</a></li>
-            <li><a class="region-button" id="TR">TR</a></li>
-            <li><a class="region-button" id="RU">RU</a></li>
-            <li><a class="region-button" id="LAN">LAN</a></li>
-            <li><a class="region-button" id="LAS">LAS</a></li>
-            <li><a class="region-button" id="OCE">OCE</a></li>
-            <li><a class="region-button" id="KR">KR</a></li>
-            <li><a class="region-button" id="JP">JP</a></li>
-        </ul>
+            <br>
+            <br>
 
-        <br>
+            <ul class="region" id="region-select">
+                <li><a class="region-button" id="NA" style="background-color: #111;">NA</a></li>
+                <li><a class="region-button" id="EUW">EUW</a></li>
+                <li><a class="region-button" id="EUNE">EUNE</a></li>
+                <li><a class="region-button" id="BR">BR</a></li>
+                <li><a class="region-button" id="TR">TR</a></li>
+                <li><a class="region-button" id="RU">RU</a></li>
+                <li><a class="region-button" id="LAN">LAN</a></li>
+                <li><a class="region-button" id="LAS">LAS</a></li>
+                <li><a class="region-button" id="OCE">OCE</a></li>
+                <li><a class="region-button" id="KR">KR</a></li>
+                <li><a class="region-button" id="JP">JP</a></li>
+            </ul>
 
-        <input onclick="get_summoner_data()" class="submit-button" type="submit" value="Search User">
+            <br>
 
+            <input class="submit-button" type="submit" value="Search User">
+        </form>
 
     </div>
 
@@ -51,15 +53,15 @@
 
     <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
     <script>
+        $('#summonerForm').on('submit', function (e) {
+            e.preventDefault()
+            let summoner_name = $('#summonerName').val()
+            var route_url = "{% url 'summonerPage' region='NA' summoner_name="SUMMONER_NAME" %}"
+            route_url = route_url.replace('NA', getRegionID(region))
+            route_url = route_url.replace('SUMMONER_NAME', summoner_name)
+            window.location.href = route_url
 
-    function get_summoner_data(){
-
-        let summoner_name = ''
-        let summoner_region = ''
-
-    }
-
-
+        })
     </script>
 
 {% endblock %}

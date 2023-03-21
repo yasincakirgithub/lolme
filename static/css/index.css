@@ -409,8 +409,7 @@ a:active {
 }
 
 .body {
-    background: #303030;	
-    background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/carbon_fibre.png");
+    background: #303030;
     background-blend-mode: overlay;
 	transform:translate3d(0,0,0);
 }

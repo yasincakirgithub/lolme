@@ -1,0 +1,17 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block pageTitle %}About{% endblock %}
+{% block content %}
+
+    {{ summoner_name }}-{{ region }}
+
+{% endblock %}
+
+
+{% block customCss %}
+    <link href="{% static 'css/about.css' %}" rel="stylesheet" type="text/css" media="screen">
+{% endblock %}
+{% block customJs %}
+    <script type="text/javascript" src="{% static 'js/about.js' %}"></script>
+{% endblock %}
