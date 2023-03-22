@@ -6,24 +6,23 @@ from datetime import datetime
 # Create your views here.
 
 league_icon_dict = {
-    'iron':"01",
-    'bronze':"02",
-    'silver':"03",
-    'gold':"04",
-    'platinum':"05",
-    'diamond':"06",
-    'master':"07",
-    'grandmaster':"08",
-    'challenger':"09",
+    'iron': "01",
+    'bronze': "02",
+    'silver': "03",
+    'gold': "04",
+    'platinum': "05",
+    'diamond': "06",
+    'master': "07",
+    'grandmaster': "08",
+    'challenger': "09",
 }
 league_rank_dict = {
-    'I':"1",
-    'II':"2",
-    'III':"3",
-    'IV':"4",
-    'V':"5"
+    'I': "1",
+    'II': "2",
+    'III': "3",
+    'IV': "4",
+    'V': "5"
 }
-
 
 summoner_data_url = '/lol/summoner/v4/summoners/by-name/'
 top20champions_data_url = '/lol/champion-mastery/v4/champion-masteries/by-summoner/'
@@ -69,14 +68,15 @@ def summonerPage(request, region, summoner_name):
         },
         'top20champions': [{'championId': champion["championId"],
                             'championLevel': champion["championLevel"],
-                            'championLevelIcon': f"https://lolg-cdn.porofessor.gg/img/s/masteries/lvl{champion['championLevel']}.png" if champion['championLevel'] > 3 else None,
+                            'championLevelIcon': f"https://lolg-cdn.porofessor.gg/img/s/masteries/lvl{champion['championLevel']}.png" if
+                            champion['championLevel'] > 3 else None,
                             'championPoints': champion["championPoints"],
                             'lastPlayTime': datetime.utcfromtimestamp(champion["lastPlayTime"] / 1000).strftime(
                                 '%d/%m/%Y'),
                             'championIcon': f"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{champion['championId']}.png"}
                            for champion in top20champions_response],
 
-        'league_entries': [{'queue_type': league_entry["queueType"].replace("_"," "),
+        'league_entries': [{'queue_type': league_entry["queueType"].replace("_", " "),
                             'tier': league_entry["tier"],
                             'rank': league_entry["rank"],
                             'leaguePoints': league_entry["leaguePoints"],

@@ -1,7 +1,7 @@
 {% extends 'layout/base.html' %}
 {% load static %}
 
-{% block pageTitle %}About{% endblock %}
+{% block pageTitle %}{{ summoner.name }}{% endblock %}
 {% block content %}
 
     {% if error %}
