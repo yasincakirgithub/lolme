@@ -84,13 +84,13 @@
                                             aria-controls="nav-top20"
                                             aria-selected="true">Top 20 Champions
                                     </button>
-                                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-profile" type="button" role="tab"
-                                            aria-controls="nav-profile" aria-selected="false">Profile
-                                    </button>
-                                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-contact" type="button" role="tab"
-                                            aria-controls="nav-contact" aria-selected="false">Active Game
+{#                                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"#}
+{#                                            data-bs-target="#nav-profile" type="button" role="tab"#}
+{#                                            aria-controls="nav-profile" aria-selected="false">Profile#}
+{#                                    </button>#}
+                                    <button class="nav-link" id="nav-activegame-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-activegame" type="button" role="tab"
+                                            aria-controls="nav-activegame" aria-selected="false">Active Game
                                     </button>
                                 </div>
                             </nav>
@@ -127,8 +127,55 @@
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel"
                                      aria-labelledby="nav-profile-tab">...
                                 </div>
-                                <div class="tab-pane fade" id="nav-contact" role="tabpanel"
-                                     aria-labelledby="nav-contact-tab">...
+                                <div class="tab-pane fade" id="nav-activegame" role="tabpanel"
+                                     aria-labelledby="nav-activegame-tab">
+
+                                    {% if active_games %}
+                                        <div class="row text-center">
+
+
+                                        <div class="col-12">BLUE SİDE</div>
+
+                                        {% for participant in active_games.participants_blue %}
+                                            <div class="col">
+
+                                            <div class="card">
+                                                <div class="card-body">
+
+                                                    <div class="row">
+                                                        <p>{{ participant.summonerName }}</p>
+                                                        <img class="img img-fluid" src="{{ participant.profileIconUrl }}">
+
+                                                        <div class="spellContainer">
+                                                            <img width="50%" src="{{ participant.spell1Icon }}">
+                                                            <img width="50%" src="{{ participant.spell2Icon }}">
+                                                        </div>
+                                                        
+                                                        <div class="championContainer">
+                                                            <img src="{{ participant.championIcon }}">
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="card-footer">footer</div>
+                                            </div>
+
+
+                                        </div>
+                                        {% endfor %}
+
+
+                                    </div>
+                                    {%  else %}
+
+                                        <p>ACTİVE GAME NOT FOUND</p>
+
+                                    {% endif %}
+
+
+
+
                                 </div>
                             </div>
 
@@ -156,6 +203,12 @@
         .card-horizontal {
             display: flex;
             flex: 1 1 auto;
+        }
+
+        .spellContainer{
+            border:1px solid gray;
+            display: flex;
+            padding: 5px;
         }
 
     </style>

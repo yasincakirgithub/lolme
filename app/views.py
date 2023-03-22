@@ -2,8 +2,25 @@ from django.shortcuts import render
 import requests
 import json
 from datetime import datetime
+from django.conf import settings
+import os
 
 # Create your views here.
+
+spells_json_data = open(os.path.join(settings.BASE_DIR, 'static', 'json', 'spells.json'))
+spells_json = json.load(spells_json_data)
+
+champions_json_data = open(os.path.join(settings.BASE_DIR, 'static', 'json', 'champion.json'), encoding="utf8")
+champions_json = json.load(champions_json_data)
+
+
+def lookup_champs(key):
+    return next(v for k, v in champions_json["data"].items() if v['key'] == str(key))
+
+
+def lookup_spell(key):
+    return next(v for k, v in spells_json["data"].items() if v['key'] == str(key))
+
 
 league_icon_dict = {
     'iron': "01",
@@ -27,6 +44,7 @@ league_rank_dict = {
 summoner_data_url = '/lol/summoner/v4/summoners/by-name/'
 top20champions_data_url = '/lol/champion-mastery/v4/champion-masteries/by-summoner/'
 league_entries_data_url = '/lol/league/v4/entries/by-summoner/'
+active_games_data_url = '/lol/spectator/v4/active-games/by-summoner/'
 
 api_key = "?api_key=RGAPI-41be0733-2b4f-474c-aa47-76b37724bee4"
 
@@ -37,6 +55,9 @@ def homePage(request):
 
 def aboutPage(request):
     return render(request, 'about/index.html', context={})
+
+
+# def get_summoner_json(data):
 
 
 def summonerPage(request, region, summoner_name):
@@ -56,11 +77,37 @@ def summonerPage(request, region, summoner_name):
     league_entries_response = requests.request('GET', league_entries_base_data_url)
     league_entries_response = league_entries_response.json()
 
+    active_games_base_data_url = request_url + active_games_data_url + summoner_response["id"] + api_key
+    active_games_response = requests.request('GET', active_games_base_data_url)
+    if active_games_response.status_code == 200:
+        active_games_response = active_games_response.json()
+
+        active_games_json = {
+            'participants_blue': [{
+                'summonerName': participan['summonerName'],
+                'profileIconUrl': f'https://ddragon.leagueoflegends.com/cdn/13.6.1/img/profileicon/{participan["profileIconId"]}.png',
+                'spell1Icon': f"https://ddragon.leagueoflegends.com/cdn/13.6.1/img/spell/{lookup_spell(participan['spell1Id'])['image']['full']}",
+                'spell2Icon': f"https://ddragon.leagueoflegends.com/cdn/13.6.1/img/spell/{lookup_spell(participan['spell2Id'])['image']['full']}",
+                'championIcon': f"http://ddragon.leagueoflegends.com/cdn/13.6.1/img/champion/{lookup_champs(participan['championId'])['image']['full']}"
+            } for participan in active_games_response['participants'][0:5]],
+            'participants_red': [{
+                'summonerName': participan['summonerName'],
+                'profileIconUrl': f'https://ddragon.leagueoflegends.com/cdn/13.6.1/img/profileicon/{participan["profileIconId"]}.png',
+                'spell1Icon': f"https://ddragon.leagueoflegends.com/cdn/13.6.1/img/spell/{lookup_spell(participan['spell1Id'])['image']['full']}",
+                'spell2Icon': f"https://ddragon.leagueoflegends.com/cdn/13.6.1/img/spell/{lookup_spell(participan['spell2Id'])['image']['full']}",
+                'championIcon': f"http://ddragon.leagueoflegends.com/cdn/13.6.1/img/champion/{lookup_champs(participan['championId'])['image']['full']}"
+            } for participan in active_games_response['participants'][5:10]],
+        }
+
+
+    else:
+        active_games_json = None
+
     response_json = {
 
         'summoner': {
             'name': summoner_response["name"],
-            'profileIconUrl': f'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/{summoner_response["profileIconId"]}.jpg',
+            'profileIconUrl': f'https://ddragon.leagueoflegends.com/cdn/13.6.1/img/profileicon/{summoner_response["profileIconId"]}.png',
             'level': summoner_response["summonerLevel"],
             'puuid': summoner_response["puuid"],
             'accountId': summoner_response["accountId"],
@@ -73,7 +120,7 @@ def summonerPage(request, region, summoner_name):
                             'championPoints': champion["championPoints"],
                             'lastPlayTime': datetime.utcfromtimestamp(champion["lastPlayTime"] / 1000).strftime(
                                 '%d/%m/%Y'),
-                            'championIcon': f"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/{champion['championId']}.png"}
+                            'championIcon': f"http://ddragon.leagueoflegends.com/cdn/13.6.1/img/champion/{lookup_champs(champion['championId'])['image']['full']}"}
                            for champion in top20champions_response],
 
         'league_entries': [{'queue_type': league_entry["queueType"].replace("_", " "),
@@ -82,7 +129,9 @@ def summonerPage(request, region, summoner_name):
                             'leaguePoints': league_entry["leaguePoints"],
                             'wins': league_entry["wins"],
                             'icon': f"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/content/src/leagueclient/rankedcrests/{league_icon_dict[league_entry['tier'].lower()]}_{league_entry['tier'].lower()}/images/{league_entry['tier'].lower()}_crown_d{league_rank_dict[league_entry['rank']]}.png",
-                            'losses': league_entry["losses"]} for league_entry in league_entries_response]
+                            'losses': league_entry["losses"]} for league_entry in league_entries_response],
+
+        'active_games': active_games_json
 
     }
 
