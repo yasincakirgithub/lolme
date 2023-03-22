@@ -6,10 +6,6 @@
 
     {% if error %}
 
-        Summoner Not Found
-
-    {% else %}
-
         <div class="container">
 
             <div class="row">
@@ -17,44 +13,131 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-horizontal">
-                            <div class="img-square-wrapper">
-                                <img width="100px" class="" src="{{ summoner.profileIconUrl }}">
-                            </div>
                             <div class="card-body">
-                                <h4 class="card-title">{{ summoner.name }}</h4>
-                                <p class="card-text">Seviye : <b>{{ summoner.level }}</b></p>
+                                <h4 class="card-title">Opps!</h4>
+                                <p class="card-text">Summoner Not Found</p>
                             </div>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">Last updated 3 mins ago</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <table>
-            <thead>
-            <tr>
-                <th>Icon</th>
-                <th>championLevel</th>
-                <th>championPoints</th>
-                <th>lastPlayTime</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for champion in top20champions %}
 
-                <tr>
-                    <td><img src="{{ champion.championIcon }}"></td>
-                    <td>{{ champion.championLevel }}</td>
-                    <td>{{ champion.championPoints }}</td>
-                    <td>{{ champion.lastPlayTime }}</td>
-                </tr>
-            {% endfor %}
+    {% else %}
 
-            </tbody>
-        </table>
+        <div class="container">
+
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+
+                        <div class="card-header text-center">
+
+                            <h4 class="card-title">{{ summoner.name }}</h4>
+                            <p class="card-text">Seviye : <b>{{ summoner.level }}</b></p>
+
+                        </div>
+                        <div class="card-horizontal">
+
+
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-3">
+
+                                        <img style="height: 100%" class="img-fluid" src="{{ summoner.profileIconUrl }}">
+
+                                    </div>
+
+                                    <div class="col-9">
+                                        <div class="row">
+                                            {% for league_entry in league_entries %}
+                                                <div class="col-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row"
+                                                                 style="height: 120px;background-size: cover;background-image: url('{{ league_entry.icon }}') ">
+
+                                                            </div>
+                                                            <p style="text-align: center">{{ league_entry.queue_type }}</p>
+                                                            <p style="text-align: center" class="card-text">
+                                                                <b>{{ league_entry.tier }} {{ league_entry.rank }}
+                                                                    - {{ league_entry.leaguePoints }} LP</b></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button class="nav-link active" id="nav-top20-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-top20" type="button" role="tab"
+                                            aria-controls="nav-top20"
+                                            aria-selected="true">Top 20 Champions
+                                    </button>
+                                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-profile" type="button" role="tab"
+                                            aria-controls="nav-profile" aria-selected="false">Profile
+                                    </button>
+                                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-contact" type="button" role="tab"
+                                            aria-controls="nav-contact" aria-selected="false">Active Game
+                                    </button>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-top20" role="tabpanel"
+                                     aria-labelledby="nav-top20-tab">
+
+                                    <table id="championTable" class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Şampiyon</th>
+                                            <th>Puan</th>
+                                            <th>Son Oynama Tarihi</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for champion in top20champions %}
+                                            <tr>
+                                                <td>
+                                                    {% if champion.championLevelIcon %}
+                                                        <img width="30px" src="{{ champion.championLevelIcon }}"/>
+                                                    {% endif %}
+                                                    <img width="40px" src="{{ champion.championIcon }}"/>
+                                                </td>
+                                                <td>{{ champion.championPoints }}</td>
+                                                <td>{{ champion.lastPlayTime }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                                     aria-labelledby="nav-profile-tab">...
+                                </div>
+                                <div class="tab-pane fade" id="nav-contact" role="tabpanel"
+                                     aria-labelledby="nav-contact-tab">...
+                                </div>
+                            </div>
+
+                            <small class="text-muted">Revizyon Tarihi : {{ summoner.revisionDate }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     {% endif %}
 
@@ -65,6 +148,8 @@
 
 {% block customCss %}
     <link href="{% static 'css/about.css' %}" rel="stylesheet" type="text/css" media="screen">
+    <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"
+          media="screen">
 
     <style>
 
@@ -78,4 +163,36 @@
 {% endblock %}
 {% block customJs %}
     <script type="text/javascript" src="{% static 'js/about.js' %}"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js"></script>
+
+    <script>
+        function commaSeparateNumber(val) {
+            while (/(\d+)(\d{3})/.test(val.toString())) {
+                val = val.toString().replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
+            }
+            return val;
+        }
+
+        $('#championTable').DataTable(
+            {
+                "paging": false,
+                "searching": false,
+                "columnDefs": [
+                    {
+                        "render": function (data, type, row) {
+                            return commaSeparateNumber(data);
+                        },
+                        "targets": [1]
+                    },
+                    {
+                        "targets": [2],
+                        "type": "date-eu"
+                    },
+                ]
+            }
+        );
+
+    </script>
+
 {% endblock %}
