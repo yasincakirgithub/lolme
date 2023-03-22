@@ -46,7 +46,7 @@ top20champions_data_url = '/lol/champion-mastery/v4/champion-masteries/by-summon
 league_entries_data_url = '/lol/league/v4/entries/by-summoner/'
 active_games_data_url = '/lol/spectator/v4/active-games/by-summoner/'
 
-api_key = "?api_key=RGAPI-41be0733-2b4f-474c-aa47-76b37724bee4"
+api_key = "?api_key=RGAPI-71e3842a-8703-4a54-95fe-81f219ef4e7e"
 
 
 def homePage(request):
