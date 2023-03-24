@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 from django.conf import settings
 import os
+from app.models import RiotApiKey
 
 # Create your views here.
 
@@ -46,7 +47,7 @@ top20champions_data_url = '/lol/champion-mastery/v4/champion-masteries/by-summon
 league_entries_data_url = '/lol/league/v4/entries/by-summoner/'
 active_games_data_url = '/lol/spectator/v4/active-games/by-summoner/'
 
-api_key = "?api_key=RGAPI-71e3842a-8703-4a54-95fe-81f219ef4e7e"
+
 
 
 def homePage(request):
@@ -61,6 +62,10 @@ def aboutPage(request):
 
 
 def summonerPage(request, region, summoner_name):
+
+    api_key = RiotApiKey.objects.all().first()
+    api_key = f"?api_key={api_key.key}"
+
     request_url = f"https://{region}.api.riotgames.com"
     summoner_base_data_url = request_url + summoner_data_url + summoner_name + api_key
     summoner_response = requests.request('GET', summoner_base_data_url)
